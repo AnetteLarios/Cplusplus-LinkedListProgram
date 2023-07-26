@@ -62,6 +62,29 @@ class LinkedList{
         OPT_EXIT_ADD
     };
 
+    /*
+    @since 07.26.2023
+    */
+     void prependMethod(int data){
+        Node *node = new Node(data);
+       //Case 1: If the list is not empty the new node is the only element, header and tail have to point to this new node.
+        if(header == NULL){
+            header = node;
+            tail = node;
+        /* Case 2 : If the list is not empty, then is necessary to have a pointer where will be saved the node that header
+        is pointing, then the new node becomes the one header is pointing and this new header, will have as next element the
+        node that temp is pointing.
+        */
+        } else {
+          Node *temp = header;
+          header = node;
+          node-> next = temp;
+        }
+        //In both cases it is necessary to increment the size as we are adding a new node.
+        size ++;
+     }
+
+
 
     /*
     @since 07.25.2023
