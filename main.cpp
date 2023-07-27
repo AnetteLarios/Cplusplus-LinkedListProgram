@@ -65,6 +65,73 @@ class LinkedList{
     /*
     @since 07.26.2023
     */
+    void addNodeCertainPosition(int position, int data){
+
+        Node *node = new Node(data);
+        Node *previous;
+        Node *current = header;
+
+        //Case 1: If the user inserts an invalid position, a message will be shown.
+        if(position < 1 || position > size + 1){
+            cout << "Invalid position, please try again."<<endl;
+        }
+        /*
+        Case 2: If the user inserts position 1, it means that wants to add a node at the beginning of the list.
+        instead of executing the process again, it is better to call the prepend method.
+        */
+        else if(position == 1){
+            prependMethod();
+        }
+        /*
+        Case 3: If the user inserts as position the size of the list plus 1, that means that the user wants to insert
+        a node at the end of the list, call append method.
+        */
+        else if (position == size + 1){
+            appendMethod();
+        /*
+        Case 4: If the user inserts a valid position between the first and the last node.
+            Step 1: Create a new node and assign the information the user inserted.
+            Step 2: Create a new node called previous.
+            Step 3: Create a new node called current that points to the node header is pointing.
+            Step 4: Run a cycle to go through all the elements of the list, this cycle stop at the position the user inserted.
+                    While this is happening, previous will point to the node that current is pointing, and current will point to
+                    its next node.
+            Step 5: When the cycle stops, previous will be one position BEFORE the position the user inserted, and CURRENT will
+                    at the EXACT position the user inserted.
+                    Then, the next element of previous is the new node the user created and the next element of the new node is
+                    the node that current is pointing.
+        */
+        } else {
+            for (int i = 1; i < position; i++){
+                previous = current;
+                current = current ->next;
+            }
+            previous -> next = node;
+            node -> next = current;
+        }
+        //Increment the size
+        size ++;
+    }
+
+    /*
+    @since 07.26.2023
+    */
+    void menuOptionAddNodeCertainPosition(){
+
+         int data, position;
+
+         do{
+             cout<<"Please insert the position you want to insert the node in:"<<endl;
+             cin >> position;
+             cout<<"Please insert the data you want to be within the node (an integer):"<<endl;
+             cin >> data;
+         }while(position < 1 || position > size + 1);
+         addNodeCertainPosition(position, data);
+    }
+
+    /*
+    @since 07.26.2023
+    */
      void prependMethod(int data){
         Node *node = new Node(data);
        //Case 1: If the list is not empty the new node is the only element, header and tail have to point to this new node.
@@ -84,7 +151,19 @@ class LinkedList{
         size ++;
      }
 
+     /*
+     menuAddOptionEnding is a void function with the only purpose to show a message that indicates the user to insert an
+     integer, store it in a variable, and then send that information as a parameter to prependMethod() function.
+     @author Anette Larios
+     @since 07.26.2023
+     */
 
+    void menuOptionAddNodeAtBeggining(){
+        int data;
+        cout << "Please insert the data you want to insert within the node (an integer):"<<endl;
+        cin >> data;
+        prependMethod(data);
+    }
 
     /*
     @since 07.25.2023
@@ -131,13 +210,13 @@ class LinkedList{
                 switch(optionAddNodeMenu){
 
                     case OPT_ADD_BEGINNING:
-                        //add to the beginning
+                        menuOptionAddNodeAtBeggining();
                         break;
                     case OPT_ADD_ENDING:
                         menuOptionAddNodeAtEnding();
                         break;
                     case OPT_ADD_CERTAIN_POSITION:
-                        //add a certain position function.
+                        menuOptionAddNodeCertainPosition();
                         break;
                     default:
                         break;
