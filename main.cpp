@@ -63,6 +63,83 @@ class LinkedList{
     };
 
     /*
+    @since 07.27.2023
+    */
+    enum menuDeleteNodeOptions{
+
+        OPT_DELETE_FIRST,
+        OPT_DELETE_LAST,
+        OPT_DELETE_CERTATIN_POSITION,
+        OPT_EXIT_ADD
+    };
+/*
+Ideas:
+
+In every menu there is a few lines that shows a message for the menu, this can be separated in one function.
+-The switch of the mainmenu can be extracted in another function since is too long
+-Show the list, print the list whenever the user interacts with the list
+
+*/
+    /*
+    @since 07.27.2023
+    */
+    void deleteLastNode(){
+
+        if(header->next == NULL){
+            deleteFirstNode();
+        }else{
+            Node *previous;
+            Node *current = header;
+            while(current->next != NULL){
+                previous = current;
+                current = current -> next;
+            }
+            previous -> next = NULL;
+            tail = previous;
+            delete current;
+    }
+    size --;
+    }
+
+    /*
+    @since 07.27.2023
+    */
+    void deleteFirstNode(){
+
+        Node *temp = header;
+        header = header -> next;
+        delete temp;
+        size--;
+    }
+    /*
+    @since 07.27.2023
+    */
+    void menuDeleteNode(){
+        int optionMenu;
+        do{
+            cout << "---------DELETE NODE MENU----------" << endl
+                 << "Please select an option:"<<endl
+                 << OPT_DELETE_FIRST << ") Delete first node." << endl
+                 << OPT_DELETE_LAST << ") Delete last node." << endl
+                 << OPT_DELETE_CERTATIN_POSITION << ")Delete node at an specific position." << endl;
+                 cin >> optionDeleteNode;
+        } while (optionDeleteNode != 0);
+
+            switch (optionDeleteNode){
+
+            case OPT_DELETE_FIRST:
+                deleteFirstNode();
+                break;
+            case OPT_DELETE_LAST:
+                break;
+            case OPT_DELETE_CERTATIN_POSITION:
+                break;
+            default;
+                break;
+        }
+    }
+
+    /*
     @since 07.26.2023
     */
     void addNodeCertainPosition(int position, int data){
@@ -196,7 +273,7 @@ class LinkedList{
 
     void menuAddNode(){
 
-        int optionAddNodeMenu;
+        int optionMenu;
         int data;
         do{
             cout<<"-------ADD NODE MENU------"<<endl
@@ -229,7 +306,7 @@ class LinkedList{
     */
     void mainMenu(){
 
-        int option;
+        int optionMenu;
 
         do{
         cout << "-----------------LINKED LIST MAIN MENU--------------"<<endl
@@ -248,6 +325,10 @@ class LinkedList{
                     menuAddNode();
                     break;
                 case OPT_DELETE_NODE:
+                    if(header != NULL){
+                    menuDeleteNode();
+                    } else
+                    cout << "The list is empty, you can delete any elements." <<endl;
                     break;
                 case OPT_DELETE_ALL:
                     break;
