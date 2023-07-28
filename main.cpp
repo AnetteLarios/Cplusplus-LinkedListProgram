@@ -37,6 +37,22 @@ class LinkedList{
           tail = NULL;
           size = 0;
         }
+
+        /*
+        @since 07.28.2023
+        */
+        ~LinkedList(){
+
+            while(header != NULL){
+                Node *deleteNext = header;
+                header = header -> next;
+                delete deleteNext;
+            }
+            delete header;
+            delete tail;
+        }
+
+
     /*
     @since 07.21.2023
     */
@@ -80,6 +96,66 @@ In every menu there is a few lines that shows a message for the menu, this can b
 -Show the list, print the list whenever the user interacts with the list
 
 */
+
+
+    /*
+    @since 07.28.2023
+    */
+    void searchNode(int position){
+    }
+
+    /*
+    @since 07.28.2023
+    */
+    void menuOptionSearchNode(){
+
+        int position;
+        cout << "Please insert the position of the node you want to see:" << endl;
+        cin >> position;
+        searchNode(position);
+    }
+
+
+    /*
+    @since 07.28.2023
+    */
+    void deleteNodeCertainPosition(int nodePosition){
+
+        Node *previous;
+        Node *current = header;
+
+        if (position == 1){
+            deleteFirstNode();
+        }else if (position == size){
+            deleteLastNode();
+        }else{
+            for(int i = 1; i <= nodePosition; i++){
+                previous = current;
+                current = current -> next;
+            }
+            previous -> next = current -> next;
+            delete current;
+        }
+        size --;
+
+    }
+
+
+
+    /*
+    @since 07.28.2023
+    */
+     void menuOptionDeleteNodeCertainPosition(){
+        int nodePosition;
+        do {
+        cout << "Please enter the position of the node you want to delete:" << endl;
+        cin >> nodePosition;
+        } while (nodePosition == 0 || position > size);
+        deleteNodeCertainPosition(nodePosition);
+
+     }
+
+
     /*
     @since 07.27.2023
     */
@@ -87,7 +163,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
 
         if(header->next == NULL){
             deleteFirstNode();
-        }else{
+        }else{git
             Node *previous;
             Node *current = header;
             while(current->next != NULL){
@@ -131,10 +207,13 @@ In every menu there is a few lines that shows a message for the menu, this can b
                 deleteFirstNode();
                 break;
             case OPT_DELETE_LAST:
+                deleteLastNode();
                 break;
             case OPT_DELETE_CERTATIN_POSITION:
+                menuOptionDeleteNodeCertainPosition();
                 break;
             default;
+                cout << "Invalid option, please try again." << endl;
                 break;
         }
     }
@@ -280,8 +359,8 @@ In every menu there is a few lines that shows a message for the menu, this can b
                 <<"Please select an option: "<<endl
                 <<OPT_ADD_BEGINNING<<") Add a node at the beginning of the list."<<endl
                 <<OPT_ADD_ENDING<<") Add a node at the end of the list."<<endl
-                <<OPT_ADD_CERTAIN_POSITION<<") Adddd  a node at a certain position within the linked list."<<endl
-                <<OPT_EXIT_ADD<<")Exit from add node menu."<<endl;
+                <<OPT_ADD_CERTAIN_POSITION<<") Add a node at a certain position within the linked list."<<endl
+                <<OPT_EXIT_ADD<<") Exit from add node menu."<<endl;
                 cin >> optionAddNodeMenu;
 
                 switch(optionAddNodeMenu){
@@ -328,11 +407,15 @@ In every menu there is a few lines that shows a message for the menu, this can b
                     if(header != NULL){
                     menuDeleteNode();
                     } else
-                    cout << "The list is empty, you can delete any elements." <<endl;
+                    cout << "The list is empty, you can delete any elements." << endl;
                     break;
                 case OPT_DELETE_ALL:
+                    ~LinkedList();
                     break;
                 case OPT_SEARCH_NODE:
+                    if(header == NULL){
+                        cout << "List empty, there is no nodes to show." << endl;
+                    }
                     break;
                 case OPT_SHOW_LIST:
                     break;
