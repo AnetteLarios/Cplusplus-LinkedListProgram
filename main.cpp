@@ -22,6 +22,14 @@ class Node{
             //the pointer will point to null
             next = NULL;
         }
+        //getters and setters
+        int getData(){
+            return data;
+        }
+
+        void setData(int data){
+            this->data = data;
+        }
 };
 
 class LinkedList{
@@ -38,8 +46,8 @@ class LinkedList{
           size = 0;
         }
 
-        /*
-        @since 07.28.2023
+        /**
+            @since 07.28.2023
         */
         ~LinkedList(){
 
@@ -53,7 +61,7 @@ class LinkedList{
         }
 
 
-    /*
+    /**
     @since 07.21.2023
     */
     enum mainmenuOptions{
@@ -67,7 +75,7 @@ class LinkedList{
 
     };
 
-    /*
+    /**
     @since 07.21.2023
     */
     enum menuAddNodeOptions{
@@ -78,15 +86,17 @@ class LinkedList{
         OPT_EXIT_ADD
     };
 
-    /*
+    /**
+    @author Anette Larios
     @since 07.27.2023
+    @lastUpdate 07.31.2023
     */
     enum menuDeleteNodeOptions{
 
         OPT_DELETE_FIRST,
         OPT_DELETE_LAST,
         OPT_DELETE_CERTATIN_POSITION,
-        OPT_EXIT_ADD
+        OPT_EXIT_DELETE
     };
 /*
 Ideas:
@@ -96,15 +106,34 @@ In every menu there is a few lines that shows a message for the menu, this can b
 -Show the list, print the list whenever the user interacts with the list
 
 */
+    /**
+      *
+      *
+      *@since 07.31.2023
+    **/
 
-
-    /*
+    void showLinkedList(){
+        Node *current = header;
+        Node *previous;
+        cout << "The elements of the list are: "
+        for( int i = 1; i < size; i++){
+            previous = current;
+            current  = current -> next;
+            cout << "Position "<<i<<": " previous.getData();
+        }
+    }
+    /**
     @since 07.28.2023
     */
     void searchNode(int position){
+        Node *current = header;
+        for(int i = 1; i<= position; i++){
+            current = current -> next;
+        }
+        cout << "The node in position '"<< position <<"' is: "<<current.getData() <<endl;
     }
 
-    /*
+    /**
     @since 07.28.2023
     */
     void menuOptionSearchNode(){
@@ -116,7 +145,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
     }
 
 
-    /*
+    /**
     @since 07.28.2023
     */
     void deleteNodeCertainPosition(int nodePosition){
@@ -140,9 +169,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
 
     }
 
-
-
-    /*
+    /**
     @since 07.28.2023
     */
      void menuOptionDeleteNodeCertainPosition(){
@@ -156,7 +183,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
      }
 
 
-    /*
+    /**
     @since 07.27.2023
     */
     void deleteLastNode(){
@@ -177,7 +204,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
     size --;
     }
 
-    /*
+    /**
     @since 07.27.2023
     */
     void deleteFirstNode(){
@@ -187,7 +214,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
         delete temp;
         size--;
     }
-    /*
+    /**
     @since 07.27.2023
     */
     void menuDeleteNode(){
@@ -212,13 +239,15 @@ In every menu there is a few lines that shows a message for the menu, this can b
             case OPT_DELETE_CERTATIN_POSITION:
                 menuOptionDeleteNodeCertainPosition();
                 break;
+            case OPT_EXIT_DELETE:
+                exit();
             default;
                 cout << "Invalid option, please try again." << endl;
                 break;
         }
     }
 
-    /*
+    /**
     @since 07.26.2023
     */
     void addNodeCertainPosition(int position, int data){
@@ -269,7 +298,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
         size ++;
     }
 
-    /*
+    /**
     @since 07.26.2023
     */
     void menuOptionAddNodeCertainPosition(){
@@ -285,7 +314,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
          addNodeCertainPosition(position, data);
     }
 
-    /*
+    /**
     @since 07.26.2023
     */
      void prependMethod(int data){
@@ -307,7 +336,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
         size ++;
      }
 
-     /*
+     /**
      menuAddOptionEnding is a void function with the only purpose to show a message that indicates the user to insert an
      integer, store it in a variable, and then send that information as a parameter to prependMethod() function.
      @author Anette Larios
@@ -321,7 +350,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
         prependMethod(data);
     }
 
-    /*
+    /**
     @since 07.25.2023
     */
     void appendMethod(int data){
@@ -374,13 +403,16 @@ In every menu there is a few lines that shows a message for the menu, this can b
                     case OPT_ADD_CERTAIN_POSITION:
                         menuOptionAddNodeCertainPosition();
                         break;
+                    case OPT_EXIT_ADD:
+                        exit();
                     default:
+                        cout << "You entered an invalid position, please try again." << endl;
                         break;
                 }
         } while (optionAddNodeMenu != 0);
     }
-
-    /*
+*
+    /**
     @since 07.21.2023
     */
     void mainMenu(){
@@ -415,11 +447,19 @@ In every menu there is a few lines that shows a message for the menu, this can b
                 case OPT_SEARCH_NODE:
                     if(header == NULL){
                         cout << "List empty, there is no nodes to show." << endl;
+                    } else {
+                        searchNode();
                     }
                     break;
                 case OPT_SHOW_LIST:
+                    if( header == NULL){
+                        cout << "List empty, there is no nodes to show." << endl;
+                    } else {
+                        showLinkedList();
+                    }
                     break;
                 case OPT_EXIT:
+                        exit();
                     break;
                 default:
                     cout << "Invalid option, please try again."<<endl;
@@ -430,7 +470,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
     }
 };
 
-/*
+/**
 @since 07.21.2023
 */
 int main(){
