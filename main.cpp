@@ -49,7 +49,7 @@ class LinkedList{
         /**
             @since 07.28.2023
         */
-        ~LinkedList(){
+         ~LinkedList(){
 
             while(header != NULL){
                 Node *deleteNext = header;
@@ -80,10 +80,11 @@ class LinkedList{
     */
     enum menuAddNodeOptions{
 
+        OPT_EXIT_ADD,
         OPT_ADD_BEGINNING,
         OPT_ADD_ENDING,
-        OPT_ADD_CERTAIN_POSITION,
-        OPT_EXIT_ADD
+        OPT_ADD_CERTAIN_POSITION
+
     };
 
     /**
@@ -104,6 +105,8 @@ Ideas:
 In every menu there is a few lines that shows a message for the menu, this can be separated in one function.
 -The switch of the mainmenu can be extracted in another function since is too long
 -Show the list, print the list whenever the user interacts with the list
+-Add search by position
+-Add search by data
 
 */
     /**
@@ -115,11 +118,11 @@ In every menu there is a few lines that shows a message for the menu, this can b
     void showLinkedList(){
         Node *current = header;
         Node *previous;
-        cout << "The elements of the list are: "
-        for( int i = 1; i < size; i++){
+        cout << "The elements of the list are: ";
+        for(int i = 1; i < size; i++){
             previous = current;
             current  = current -> next;
-            cout << "Position "<<i<<": " previous.getData();
+            cout << "Position "<<i<<": " << previous->getData();
         }
     }
     /**
@@ -130,8 +133,20 @@ In every menu there is a few lines that shows a message for the menu, this can b
         for(int i = 1; i<= position; i++){
             current = current -> next;
         }
-        cout << "The node in position '"<< position <<"' is: "<<current.getData() <<endl;
+        cout << "The node in position '"<< position <<"' is: "<<current->getData() << endl;
     }
+
+    /**
+    @since 08.01.2023
+    */
+
+    void callSearchNode(){
+        int nodePosition;
+        cout << "Please insert the position of the node you want to search:" << endl;
+        cin >> nodePosition;
+        searchNode(nodePosition);
+    }
+
 
     /**
     @since 07.28.2023
@@ -153,9 +168,9 @@ In every menu there is a few lines that shows a message for the menu, this can b
         Node *previous;
         Node *current = header;
 
-        if (position == 1){
+        if (nodePosition == 1){
             deleteFirstNode();
-        }else if (position == size){
+        }else if (nodePosition == size){
             deleteLastNode();
         }else{
             for(int i = 1; i <= nodePosition; i++){
@@ -177,7 +192,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
         do {
         cout << "Please enter the position of the node you want to delete:" << endl;
         cin >> nodePosition;
-        } while (nodePosition == 0 || position > size);
+        } while (nodePosition == 0 || nodePosition > size);
         deleteNodeCertainPosition(nodePosition);
 
      }
@@ -190,7 +205,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
 
         if(header->next == NULL){
             deleteFirstNode();
-        }else{git
+        } else {
             Node *previous;
             Node *current = header;
             while(current->next != NULL){
@@ -225,10 +240,10 @@ In every menu there is a few lines that shows a message for the menu, this can b
                  << OPT_DELETE_FIRST << ") Delete first node." << endl
                  << OPT_DELETE_LAST << ") Delete last node." << endl
                  << OPT_DELETE_CERTATIN_POSITION << ")Delete node at an specific position." << endl;
-                 cin >> optionDeleteNode;
-        } while (optionDeleteNode != 0);
+                 cin >> optionMenu;
+        } while (optionMenu != 0);
 
-            switch (optionDeleteNode){
+            switch (optionMenu){
 
             case OPT_DELETE_FIRST:
                 deleteFirstNode();
@@ -240,14 +255,32 @@ In every menu there is a few lines that shows a message for the menu, this can b
                 menuOptionDeleteNodeCertainPosition();
                 break;
             case OPT_EXIT_DELETE:
-                exit();
-            default;
+                exit(0);
+            default:
                 cout << "Invalid option, please try again." << endl;
                 break;
         }
     }
 
+
+
     /**
+    @since 07.26.2023
+    */
+    void menuOptionAddNodeCertainPosition(){
+
+         int data, position;
+
+         do{
+             cout<<"Please insert the position you want to insert the node in:"<<endl;
+             cin >> position;
+             cout<<"Please insert the data you want to be within the node (an integer):"<<endl;
+             cin >> data;
+         }while(position < 1 || position > size + 1);
+         addNodeCertainPosition(position, data);
+    }
+
+         /**
     @since 07.26.2023
     */
     void addNodeCertainPosition(int position, int data){
@@ -265,14 +298,14 @@ In every menu there is a few lines that shows a message for the menu, this can b
         instead of executing the process again, it is better to call the prepend method.
         */
         else if(position == 1){
-            prependMethod();
+           callPrependMethod();
         }
         /*
         Case 3: If the user inserts as position the size of the list plus 1, that means that the user wants to insert
         a node at the end of the list, call append method.
         */
         else if (position == size + 1){
-            appendMethod();
+            callAppendmethod();
         /*
         Case 4: If the user inserts a valid position between the first and the last node.
             Step 1: Create a new node and assign the information the user inserted.
@@ -301,22 +334,6 @@ In every menu there is a few lines that shows a message for the menu, this can b
     /**
     @since 07.26.2023
     */
-    void menuOptionAddNodeCertainPosition(){
-
-         int data, position;
-
-         do{
-             cout<<"Please insert the position you want to insert the node in:"<<endl;
-             cin >> position;
-             cout<<"Please insert the data you want to be within the node (an integer):"<<endl;
-             cin >> data;
-         }while(position < 1 || position > size + 1);
-         addNodeCertainPosition(position, data);
-    }
-
-    /**
-    @since 07.26.2023
-    */
      void prependMethod(int data){
         Node *node = new Node(data);
        //Case 1: If the list is not empty the new node is the only element, header and tail have to point to this new node.
@@ -335,6 +352,22 @@ In every menu there is a few lines that shows a message for the menu, this can b
         //In both cases it is necessary to increment the size as we are adding a new node.
         size ++;
      }
+
+    void callPrependMethod(){
+        int data;
+        cout << "Please insert the data you want to insert within the node:" << endl;
+        cin >> data;
+        prependMethod(data);
+    }
+
+    void callAppendmethod(){
+        int data;
+        cout << "Please insert the data you want to insert within the node:" << endl;
+        cin >> data;
+        appendMethod(data);
+
+    }
+
 
      /**
      menuAddOptionEnding is a void function with the only purpose to show a message that indicates the user to insert an
@@ -380,9 +413,7 @@ In every menu there is a few lines that shows a message for the menu, this can b
     }
 
     void menuAddNode(){
-
         int optionMenu;
-        int data;
         do{
             cout<<"-------ADD NODE MENU------"<<endl
                 <<"Please select an option: "<<endl
@@ -390,9 +421,9 @@ In every menu there is a few lines that shows a message for the menu, this can b
                 <<OPT_ADD_ENDING<<") Add a node at the end of the list."<<endl
                 <<OPT_ADD_CERTAIN_POSITION<<") Add a node at a certain position within the linked list."<<endl
                 <<OPT_EXIT_ADD<<") Exit from add node menu."<<endl;
-                cin >> optionAddNodeMenu;
+                cin >> optionMenu;
 
-                switch(optionAddNodeMenu){
+                switch(optionMenu){
 
                     case OPT_ADD_BEGINNING:
                         menuOptionAddNodeAtBeggining();
@@ -404,14 +435,14 @@ In every menu there is a few lines that shows a message for the menu, this can b
                         menuOptionAddNodeCertainPosition();
                         break;
                     case OPT_EXIT_ADD:
-                        exit();
+                        mainMenu();
                     default:
                         cout << "You entered an invalid position, please try again." << endl;
                         break;
                 }
-        } while (optionAddNodeMenu != 0);
+        } while (optionMenu != 0);
     }
-*
+
     /**
     @since 07.21.2023
     */
@@ -422,15 +453,15 @@ In every menu there is a few lines that shows a message for the menu, this can b
         do{
         cout << "-----------------LINKED LIST MAIN MENU--------------"<<endl
              << "Please select an option:" <<endl
-             << OPT_ADD_NODE << ") ADD NODE." <<endl
+             << OPT_ADD_NODE << ") ADD NODE" <<endl
              << OPT_DELETE_NODE << ") DELETE NODE AT A SPECIFIC POSITION" <<endl
              << OPT_DELETE_ALL << ") DELETE LINKED LIST"  <<endl
              << OPT_SEARCH_NODE << ") SEARCH NODE" <<endl
              << OPT_SHOW_LIST << ") SHOW LIST" <<endl
-             << OPT_EXIT << ") EXIT";
-             cin >> option;
+             << OPT_EXIT << ") EXIT" << endl;
+             cin >> optionMenu;
 
-             switch(option){
+             switch(optionMenu){
 
                 case OPT_ADD_NODE:
                     menuAddNode();
@@ -439,16 +470,19 @@ In every menu there is a few lines that shows a message for the menu, this can b
                     if(header != NULL){
                     menuDeleteNode();
                     } else
-                    cout << "The list is empty, you can delete any elements." << endl;
+                    cout << "The list is empty, you can't delete any elements." << endl;
                     break;
                 case OPT_DELETE_ALL:
-                    ~LinkedList();
+                    if( header == NULL){
+                        cout << "The list is empty, you can't delete any element."<< endl;
+                    }
+                    LinkedList().~LinkedList();
                     break;
                 case OPT_SEARCH_NODE:
                     if(header == NULL){
                         cout << "List empty, there is no nodes to show." << endl;
                     } else {
-                        searchNode();
+                        callSearchNode();
                     }
                     break;
                 case OPT_SHOW_LIST:
@@ -459,14 +493,14 @@ In every menu there is a few lines that shows a message for the menu, this can b
                     }
                     break;
                 case OPT_EXIT:
-                        exit();
+                        exit(0);
                     break;
                 default:
                     cout << "Invalid option, please try again."<<endl;
                     break;
              }
 
-        }while( option != 0);
+        }while( optionMenu != 0);
     }
 };
 
